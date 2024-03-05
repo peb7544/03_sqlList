@@ -286,6 +286,10 @@ SELECT TO_NUMBER('1,000,000','9,999,999') + 5000000 FROM DUAL;
 -- NVL(컬럼명, 컬럼값이 NULL일 때 바꿀 값) : NULL인 컬럼값을 다른값으로 변경
 
 SELECT 
+	EMP_NAME, SALARY, BONUS, SALARY * BONUS 
+FROM EMPLOYEE;
+
+SELECT 
 	EMP_NAME, SALARY, NVL(BONUS, 0), SALARY * NVL(BONUS, 0) 
 FROM EMPLOYEE;
 
@@ -363,3 +367,76 @@ SELECT SUM(SALARY) FROM EMPLOYEE;
 SELECT ROUND(AVG(SALARY)) FROM EMPLOYEE;
 
 -- 부서코드가 'D9'인 사원들의 급여 합, 평균
+/*3*/SELECT 
+	SUM(SALARY) "급여 합", 
+	ROUND(AVG(SALARY)) "급여 평균"
+/*1*/FROM EMPLOYEE
+/*2*/WHERE DEPT_CODE = 'D9';
+
+-- MIN() : 최소값
+-- MAX() : 최대값
+--> 타입 제한 없음 (숫자 : 대/소, 날짜 : 과거/미래, 문자열 : 문자 순서)
+
+-- 급여 최소값, 가장 빠른 입사일, 알파벳 순서가 가장 빠른 이메일 조회
+
+SELECT 
+	MIN(SALARY), 
+	MAX(HIRE_DATE), 
+	MIN(EMAIL)
+FROM EMPLOYEE;
+
+-- 급여 최대값, 가장 늦은 입사일, 알파벳 순서가 가장 느린 이메일 조회
+
+SELECT 
+	MAX(SALARY), 
+	MIN(HIRE_DATE), 
+	MAX(EMAIL)
+FROM EMPLOYEE;
+
+-- ENPLOYEE 테이블에서 급여를 가장 많이 받는 사원의
+-- 이름, 급여, 지급조회를 조회
+
+SELECT 
+	EMP_NAME, SALARY, JOB_CODE
+FROM EMPLOYEE
+WHERE  SALARY = (SELECT MAX(SALARY) FROM EMPLOYEE);
+
+-- COUNT() : 행 가수를 헤어려서 리턴
+-- COUNT([DISTINCT] 컬럼명) : 중복을 제거한 행 개수를 해아려서 리턴
+-- COUNT(*) : NULL을 포함한 전체 행 개수를 리턴
+-- COUNT(컬럼명) : NULL을 제외한 실제 값이 기록된 행 개수를 리턴함
+
+SELECT COUNT(*) FROM EMPLOYEE; -- 23행 EMPLOYEE 테이블의 행의 개수
+
+-- BONUS를 받는 사원의 수
+
+SELECT 
+	COUNT(*) 
+FROM EMPLOYEE
+WHERE BONUS IS NOT NULL;
+
+SELECT
+	COUNT(BONUS)
+FROM EMPLOYEE;
+
+SELECT DISTINCT 
+	DEPT_CODE
+FROM EMPLOYEE;
+
+SELECT COUNT(DISTINCT DEPT_CODE) FROM EMPLOYEE;
+
+--> 왜 1행이 적을까? NULL 값이 포함되지 않아서
+-- COUNT(컬럼명)에 의해 NULL을 제외한 실제 값이 있는 행의 개수만 조회
+
+-- EMPLOYEE 테이블에서 성별이 남성인 사원의 수 조회
+SELECT 
+	COUNT(*)
+FROM EMPLOYEE
+WHERE SUBSTR(EMP_NO,8,1) = 1;
+
+
+SELECT
+	SUM(DECODE(SUBSTR(EMP_NO,8,1), 1, 1, 0))
+FROM EMPLOYEE
+
+
