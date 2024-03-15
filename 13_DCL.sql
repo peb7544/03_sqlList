@@ -85,3 +85,62 @@ CREATE TABLE TB_TEST(
 	PK_COL NUMBER PRIMARY KEY,
 	CONTENT VARCHAR2(100)
 );
+-- ORA-00955: 기존의 객체가 이름을 사용하고 있습니다.
+--> CREATE TABLE : 테이블 생성 권한
+-- + 데이터를 저장할 수 있는 공간(TABLESPACE) 할당
+
+-- 6. (SYS) 테이블 생성권한 + TABLESPACE 할당
+GRANT CREATE TABLE TO peb_sample;
+
+ALTER USER peb_sample DEFAULT TABLESPACE 
+SYSTEM QUOTA UNLIMITED ON SYSTEM;
+-- sample 계정의 설정을 변경하여 해당 사용자가 system 테이블 스페이스에서 
+-- 무제한으로 공간을 사용할 수 있도록 변경함
+
+-- 7. (sample) 다시 테이블 생성
+CREATE TABLE TB_TEST(
+	PK_COL NUMBER PRIMARY KEY,
+	CONTENT VARCHAR2(100)
+);
+
+-- role : 권한묶음
+--> 묶어둔 권한을 특정 계정에 부여
+
+-- (SYS) sample 계정에 CONNECT, RESOURCE 부여
+GRANT CONNECT, RESOURCE TO peb_sample;
+
+-- CONNECT : DB 접속 관련 권한을 묶어둔 ROLE
+-- RESOURCE : DB 사용을 위한 기본 객체 생성 권한을 묶어둔 ROLE
+
+
+--------------------------------------------------------------------------
+
+-- * 객체 권한
+
+-- kh_peb / peb_sample 사용자 계정끼리 서로 객체 접근 권한 부여
+
+-- 1. (sample) kh_peb 계정의 EMPLOYEE 테이블 조회
+SELECT * FROM kh_peb.EMPLOYEE;
+-- ORA-00942: 테이블 또는 뷰가 존재하지 않습니다
+--> 접근 권한이 없어서 조회 불가
+
+-- 2. (kb) sample 계정에 EMPLOYEE 테이블 조회 권한 부여
+
+-- [객체 권한 부여 방법]
+-- GRANT 객체권한 ON 객체명 TO 사용자명;
+
+GRANT SELECT ON EMPLOYEE TO peb_sample;
+
+-- 3. (sample) 다시 EMPLOYEE 테이블 조회
+SELECT * FROM kh_peb.EMPLOYEE;
+
+-- 4. (kh) sample 계정에 부여한 EMPLOYEE 테이블 조회 권한 회수 (REVOKE)
+
+-- [권한 회수 작성법]
+-- REVOKE 객체권한 ON 객체명 FROM 사용자명;
+REVOKE SELECT ON EMPLOYEE FROM peb_sample;
+
+-- 5. (sample) 권한 회수 확인
+SELECT * FROM kh_peb.EMPLOYEE;
+
+
