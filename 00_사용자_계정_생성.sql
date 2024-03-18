@@ -13,13 +13,13 @@ ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 -- CTRL + ENTER : 선택한 SQL 수행
 
 -- 사용자 계정 생성
-CREATE USER workbook IDENTIFIED BY workbook;
+CREATE USER board_project IDENTIFIED BY board1234;
 
 -- 사용자 권한 부여
-GRANT RESOURCE, CONNECT TO workbook;
+GRANT RESOURCE, CONNECT TO board_project;
 
 -- 객체가 생성될 수 있는 공간 할당량 지정
-ALTER USER workbook DEFAULT TABLESPACE SYSTEM QUOTA UNLIMITED ON SYSTEM;
+ALTER USER board_project DEFAULT TABLESPACE SYSTEM QUOTA UNLIMITED ON SYSTEM;
 
 
 -- 사용자 계정 생성
