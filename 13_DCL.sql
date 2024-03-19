@@ -69,6 +69,7 @@ ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 -- CREATE USER 사용자명 IDENTIFIED BY 비밀번호
 CREATE USER peb_sample IDENTIFIED BY sample1234;
 
+
 -- 2. 새 연결 추가
 --> ORA-01045: 사용자 PEB_SAMPLE는 CREATE SESSION 권한을 가지고있지 않음; 로그온이 거절되었습니다
 --> 접속 권한(CREATE SESSION)없어서 오류 발생
